@@ -1,7 +1,6 @@
 import json
 from typing import Any, Dict
 
-from langchain_core.runnables.graph import MermaidDrawMethod
 from langgraph.graph import END, StateGraph
 
 from src.agents.crawl import crawl
@@ -70,7 +69,7 @@ def run_job_search_agent(company_name: str) -> Dict[str, Any]:
         output_file_path="job_search_workflow.png"
     )
 
-    #print("Workflow diagram saved as job_search_workflow.png")
+    # print("Workflow diagram saved as job_search_workflow.png")
 
     # Initialize the state
     initial_state = AgentState(company_name=company_name)
@@ -93,14 +92,14 @@ def save_results_to_file(
         filename (str): Name of the file to save to
     """
     # Debug: Print result type and attributes
-    #print(f"Result type: {type(result)}")
+    # print(f"Result type: {type(result)}")
 
     # Convert the result to a JSON-serializable format
     serializable_result = {}
 
     # Handle different result types
     if isinstance(result, dict):
-        #print("Result is a dictionary")
+        # print("Result is a dictionary")
         # Convert any Pydantic models in the dictionary to dictionaries
         for key, value in result.items():
             if hasattr(value, "model_dump"):

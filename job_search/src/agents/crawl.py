@@ -34,8 +34,7 @@ def crawl(state: AgentState) -> Dict[str, Any]:
                 "limit": DEFAULT_CRAWL_LIMIT,
                 "max_depth": 1,
                 "max_breadth": 100,
-                "extract_depth": "advanced",
-                # "allow_external": True,
+                "extract_depth": DEFAULT_CRAWL_LIMIT,
             },
         )
 
@@ -48,16 +47,20 @@ def crawl(state: AgentState) -> Dict[str, Any]:
         # Parse the response
         crawl_result_data = response.json()
 
-        # Extract links from the crawl result following notebook format
+        # Extract links and raw content from the crawl result
         links = []
+        raw_content_by_url = {}
         if "data" in crawl_result_data:
             pages = crawl_result_data["data"]
             for page in pages:
                 if "url" in page:
                     links.append(page["url"])
+                    # Store raw content for each URL
+                    if "raw_content" in page:
+                        raw_content_by_url[page["url"]] = page["raw_content"]
 
         print(f"Crawled {len(links)} pages")
-        #print(links)
+        # print(links)
         # Extract the base domain from selected_domain
         parsed_url = urlparse(selected_domain)
         base_domain_parts = parsed_url.netloc.split(".")
@@ -70,6 +73,7 @@ def crawl(state: AgentState) -> Dict[str, Any]:
 
         # Filter links to identify job posting URLs
         job_posting_links = []
+        job_posting_raw_content = {}
         for link in links:
             # Skip anchor links (URLs with #) unless they're part of a job ID
             if "#" in link and not re.search(r"#/jobs?/[a-zA-Z0-9-]+", link):
@@ -99,10 +103,14 @@ def crawl(state: AgentState) -> Dict[str, Any]:
                     ]
                 ):
                     job_posting_links.append(link)
+                    if link in raw_content_by_url:
+                        job_posting_raw_content[link] = raw_content_by_url[link]
 
                 # Look for UUID or alphanumeric job IDs in the path
                 elif re.search(r"/[a-f0-9-]{36}|/\d+(?:-[a-zA-Z0-9-]+)+", path):
                     job_posting_links.append(link)
+                    if link in raw_content_by_url:
+                        job_posting_raw_content[link] = raw_content_by_url[link]
 
                 # Check for career site platforms in the domain
                 elif any(
@@ -126,13 +134,23 @@ def crawl(state: AgentState) -> Dict[str, Any]:
                     ]
                 ):
                     job_posting_links.append(link)
+                    if link in raw_content_by_url:
+                        job_posting_raw_content[link] = raw_content_by_url[link]
 
         # If no job posting links were found, use the careers page itself
         if not job_posting_links and selected_domain:
             job_posting_links = [selected_domain]
+            if selected_domain in raw_content_by_url:
+                job_posting_raw_content[selected_domain] = raw_content_by_url[
+                    selected_domain
+                ]
 
         # Create CrawlResult
-        crawl_result = CrawlResult(domain=selected_domain, links=job_posting_links)
+        crawl_result = CrawlResult(
+            domain=selected_domain,
+            links=job_posting_links,
+            raw_content=job_posting_raw_content,
+        )
 
         return {"crawl_result": crawl_result}
 
