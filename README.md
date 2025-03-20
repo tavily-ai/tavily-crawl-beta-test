@@ -23,7 +23,7 @@ This repository contains everything you need to get started with Tavily Crawl. W
 A series of Jupyter notebooks to help you learn and implement Tavily Crawl:
 
 1. [Getting Started](./cookbooks/getting-started.ipynb) - Your first stop to learn the basics of the Crawl endpoint
-2. [RAG with Crawl](./cookbooks/rag-crawl.ipynb) - Learn how to crawl webpages and convert them to vector databases for RAG applications
+2. [RAG with Crawl](./cookbooks/crawl-rag.ipynb) - Learn how to crawl webpages and convert them to vector databases for RAG applications
 3. [Agentic Crawling](./cookbooks/agentic-crawl.ipynb) - Advanced techniques for autonomous web crawling
 
 ### [Job Search Application](./job_search)
