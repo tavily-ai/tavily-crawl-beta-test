@@ -26,7 +26,7 @@ A series of Jupyter notebooks to help you learn and implement Tavily Crawl:
 2. [RAG with Crawl](./cookbooks/rag-crawl.ipynb) - Learn how to crawl webpages and convert them to vector databases for RAG applications
 3. [Agentic Crawling](./cookbooks/agentic-crawl.ipynb) - Advanced techniques for autonomous web crawling
 
-### [Job Search Application](./job_search)
+### [Job Search Application](./job_search/src)
 A complete [LangGraph](https://github.com/langchain-ai/langgraph) implementation that combines [Tavily Search](https://docs.tavily.com/docs/tavily-api/search), [Tavily Crawl](https://docs.tavily.com/docs/tavily-api/crawl), and [OpenAI](https://openai.com/) to:
 - Find all job postings for a company
 - Extract key entities and information
