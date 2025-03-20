@@ -1,7 +1,7 @@
 # Tavily Crawl API - Beta Test
 
 <div align="center">
-  <img src="assets/tavily-banner.png" alt="Tavily Banner" width="1000"/>
+  <img src="assets/Banner.png" alt="Tavily Banner" width="1000"/>
 </div>
 
 ## 👋 Welcome to the Tavily Crawl Beta Test!
@@ -12,9 +12,8 @@ We're thrilled to have you join us as we roll out our newest endpoint: **Tavily 
 
 ## 🎬 Quick Introduction from Eyal @ Tavily
 
-[![Tavily Crawl Introduction](assets/logo.png)](https://your-intro-video-link-here)
-*Click the image to watch a quick introduction to Tavily Crawl*
-
+[![Tavily Crawl Introduction]](https://your-intro-video-link-here)
+*to be added soon...*
 
 ## 📂 Repository Structure
 
