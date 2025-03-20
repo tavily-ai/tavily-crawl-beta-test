@@ -1,0 +1,12 @@
+tavily-python
+python-dotenv
+ipykernel
+langchain
+langchain-openai
+langchain-core
+langgraph
+pydantic
+openai
+requests
+langchain_chroma
+langchain-community
