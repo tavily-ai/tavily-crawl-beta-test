@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -37,7 +37,6 @@ class ExtractResult(BaseModel):
     extracted_jobs: List[JobPosting] = Field(
         description="List of extracted job postings"
     )
-    raw_extractions: Dict[str, Any] = Field(description="Raw extraction data")
 
 
 class AgentState(BaseModel):

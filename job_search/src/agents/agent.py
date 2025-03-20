@@ -22,7 +22,7 @@ def create_job_search_agent():
     # Add nodes to the graph
     workflow.add_node("domain search", domain_search)
     workflow.add_node("web crawl", crawl)
-    workflow.add_node("text extraction", extract)
+    workflow.add_node("entity extraction", extract)
 
     # Define edges
     # Start with domain search
@@ -41,11 +41,11 @@ def create_job_search_agent():
     )
 
     workflow.add_conditional_edges(
-        "web crawl", check_error, {"error": END, "next": "text extraction"}
+        "web crawl", check_error, {"error": END, "next": "entity extraction"}
     )
 
     # Extract is the final step
-    workflow.add_edge("text extraction", END)
+    workflow.add_edge("entity extraction", END)
 
     # Compile the graph
     return workflow.compile()
@@ -66,7 +66,7 @@ def run_job_search_agent(company_name: str) -> Dict[str, Any]:
 
     # Save the workflow as a Mermaid PNG
     agent.get_graph(xray=True).draw_mermaid_png(
-        output_file_path="job_search_workflow.png"
+        output_file_path="job_search/agentic_workflow_diagram.png"
     )
 
     # print("Workflow diagram saved as job_search_workflow.png")

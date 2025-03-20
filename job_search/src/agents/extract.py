@@ -1,3 +1,4 @@
+import asyncio
 from typing import Any, Dict
 
 from langchain_core.output_parsers import PydanticOutputParser
@@ -40,7 +41,9 @@ job_extraction_prompt = ChatPromptTemplate.from_template(
 )
 
 
-def extract_entities(url: str, content: str, search_query: str) -> JobPosting:
+async def extract_entities_async(
+    url: str, content: str, search_query: str
+) -> JobPosting:
     """
     Extract structured job posting information from raw content.
 
@@ -52,26 +55,24 @@ def extract_entities(url: str, content: str, search_query: str) -> JobPosting:
     Returns:
         JobPosting: Structured job posting information
     """
-    # Create the chain for job extraction
-    chain = job_extraction_prompt | get_llm() | job_posting_parser
+    # Create the chain for job extraction (use async compatible LLM)
+    llm = get_llm()  # Make sure get_llm returns an async-compatible model
+    chain = job_extraction_prompt | llm | job_posting_parser
 
-    # Run the chain
-    result = chain.invoke(
+    # Run the chain asynchronously
+    result = await chain.ainvoke(
         {
             "url": url,
-            "content": content[:4000],  # Limit content size for better performance
+            "content": content[:4000],
             "search_query": search_query,
         }
     )
 
-    # The URL might not be included in the result since it's not part of the extraction
-    # So we need to ensure it's set
     result.url = url
-
     return result
 
 
-def extract(state: AgentState) -> Dict[str, Any]:
+async def extract_async(state: AgentState) -> Dict[str, Any]:
     """
     Extract job posting entities from the raw content of the crawled links.
 
@@ -98,7 +99,6 @@ def extract(state: AgentState) -> Dict[str, Any]:
 
         # Process job postings from the raw content already available from crawl step
         job_postings = []
-        raw_extractions = {}
 
         # Access the raw content from the crawl result
         raw_content_by_url = (
@@ -107,56 +107,27 @@ def extract(state: AgentState) -> Dict[str, Any]:
             else {}
         )
 
-        # Process each link that has raw content available
+        # Create tasks for all URLs with content
+        tasks = []
         for url in links:
             if url in raw_content_by_url and raw_content_by_url[url]:
                 content = raw_content_by_url[url]
+                # Add task
+                task = extract_entities_async(url, content, search_query)
+                tasks.append(task)
 
-                # Store raw extraction
-                raw_extractions[url] = {
-                    "results": [{"url": url, "raw_content": content}]
-                }
+        # Execute all tasks concurrently
+        if tasks:
+            job_postings = await asyncio.gather(*tasks, return_exceptions=True)
 
-                try:
-                    # Extract job posting information using the already available content
-                    job_posting = extract_entities(url, content, search_query)
-                    job_postings.append(job_posting)
-                except Exception as e:
-                    print(f"Error processing content from {url}: {str(e)}")
-            else:
-                # If we don't have raw content for a link, we might need to fetch it
-                # This is a fallback, but since we've refactored to use the raw content
-                # from the crawl step, this should be rare
-                try:
-                    extraction_result = tavily_client.extract(
-                        urls=url, extract_depth="advanced"
-                    )
-
-                    # Store raw extraction result
-                    raw_extractions[url] = extraction_result
-
-                    # Check if extraction was successful
-                    if (
-                        extraction_result.get("results")
-                        and len(extraction_result["results"]) > 0
-                        and "raw_content" in extraction_result["results"][0]
-                    ):
-                        content = extraction_result["results"][0]["raw_content"]
-
-                        # Extract job posting information
-                        job_posting = extract_entities(url, content, search_query)
-                        job_postings.append(job_posting)
-
-                except Exception as e:
-                    print(f"Error extracting from {url}: {str(e)}")
+            # Filter out exceptions
+            job_postings = [jp for jp in job_postings if not isinstance(jp, Exception)]
 
         if not job_postings:
             return {"error": "Failed to extract any job postings."}
 
         # Create ExtractResult
-        extract_result = ExtractResult(
-            extracted_jobs=job_postings, raw_extractions=raw_extractions
-        )
+        extract_result = ExtractResult(extracted_jobs=job_postings)
 
         return {"extract_result": extract_result}
 
@@ -166,3 +137,8 @@ def extract(state: AgentState) -> Dict[str, Any]:
         print(f"Error in extraction: {str(e)}")
         print(traceback.format_exc())
         return {"error": f"Error in extraction: {str(e)}"}
+
+
+# Create a synchronous wrapper for compatibility
+def extract(state: AgentState) -> Dict[str, Any]:
+    return asyncio.run(extract_async(state))

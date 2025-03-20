@@ -1,20 +1,30 @@
-# Job Search LangGraph Agent
+# Deep Job Search Agent
 
-This project uses a LangGraph agent with Tavily to search, crawl, and extract job posting data from the web. It leverages OpenAI's LLM to extract key information like job titles and locations.
+This project uses a LangGraph agent with Tavily to search, crawl, and extract job posting data from the web. It leverages OpenAI's LLM to extract key entities from the job postings like job title, location, and benefits.
+
+## Configuration
+
+You can modify the application configuration in `src/utils/config.py`:
+
+- `DEFAULT_MODEL`: The OpenAI model to use
+- `DEFAULT_CRAWL_LIMIT`: The maximum number of pages to crawl -- set to 5 by default...feel free to play around.
+- `DEFAULT_EXTRACT_DEPTH`: Set to `advanced` to retrieve more data, including tables and embedded content, with higher success.
+
 
 ## Features
 
-- Tavily search: Find the best job posting domain for a given company
-- Tavily crawl: Crawl the career domain to find all nested job posting links
-- Tavily extraction: Extract text from the job posting links.
-- Named entity recognition: Extract entities (title and location) from scraped web content using LLM
+- **Tavily `/Search`**: Identifies the optimal job posting domain for any specified company
+- **Tavily `/Crawl`**: Intelligently navigates the career domain to discover all job posting links and extract relevant content
+  - Utilizes `select_paths` and `select_domains` filtering parameters to precisely target job postings
+- **Advanced Entity Recognition**: Extracts structured data (job titles, locations, benefits) from web content using OpenAI's LLM capabilities
+- **LangGraph Orchestration**: Coordinates the entire workflow through a sophisticated agent-based architecture
 
 Note: control the number of pages to crawl in `src/utils/config.py` with the `DEFAULT_CRAWL_LIMIT` variable. Currently set to 5 to limit api consumption.
 
 
 ## Agent Workflow
 
-![Agent Workflow](job_search_workflow.png)
+![Agent Workflow](agentic_workflow_diagram.png)
 
 ## Setup
 
@@ -36,9 +46,7 @@ python3 -m pip install -r requirements.txt
 
 ## Usage
 
-Run the agent with a company name:
-
-For example:
+Run the agent with a company name. For example:
 ```bash
 python3 src/main.py "HiBob"
 ```
@@ -47,7 +55,7 @@ python3 src/main.py "HiBob"
 
 The results will be saved to `job_search_results.json` by default. 
 
-The agent produces a structured JSON output containing the search results, crawled links, and extracted job information. Here's a sample of what the output looks like:
+The agent produces a structured JSON output containing the Tavily Search result ()`domain_search_result`), Tavily Crawl result (`crawl_result`), and agent output (`extracted job entities`). Here's a sample of what the output looks like:
 
 ```json
 {
@@ -93,22 +101,3 @@ The agent produces a structured JSON output containing the search results, crawl
 - `src/models/`: Contains the Pydantic models for structured data
 - `src/utils/`: Contains utility functions and configuration
 - `src/main.py`: Main script to run the agent
-
-## Configuration
-
-You can modify the configuration in `src/utils/config.py`:
-
-- `DEFAULT_MODEL`: The OpenAI model to use
-- `DEFAULT_CRAWL_LIMIT`: The maximum number of pages to crawl
-- `MAX_EXTRACTIONS_PER_RUN`: The maximum number of job postings to extract
-
-This repository also contains two Jupyter notebooks demonstrating advanced web crawling techniques:
-
-## mastering-the-crawl-endpoint.ipynb
-- Deep dive into Firecrawl's crawl endpoint with comprehensive features and optimizations
-- Explores different parameters and configuration options
-
-## tavily-firecrawl.ipynb
-- Integrates Tavily Search with Firecrawl's crawl endpoint and Tavily Extract
-- Showcases a complete workflow for finding and extracting job postings for a company
-- Combines search, crawling, and extraction capabilities for data collection

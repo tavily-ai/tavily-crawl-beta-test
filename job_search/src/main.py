@@ -21,7 +21,10 @@ def main():
     parser = argparse.ArgumentParser(description="Job Search Agent")
     parser.add_argument("company_name", help="Name of the company to search for")
     parser.add_argument(
-        "--output", "-o", default="job_search_results.json", help="Output file name"
+        "--output",
+        "-o",
+        default="job_search/results/job_search_results.json",
+        help="Output file name or path",
     )
     args = parser.parse_args()
 

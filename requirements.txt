@@ -10,3 +10,4 @@ openai
 requests
 langchain_chroma
 langchain-community
+langchain_groq

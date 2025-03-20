@@ -22,6 +22,8 @@ def get_llm(model_name=DEFAULT_MODEL, temperature=DEFAULT_TEMPERATURE):
         model=model_name,
         temperature=temperature,
         api_key=OPENAI_API_KEY,
+        request_timeout=60,
+        streaming=False,
     )
 
 
