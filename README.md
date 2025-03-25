@@ -10,14 +10,9 @@ We're thrilled to have you join us as we roll out our newest endpoint: **Tavily 
 
 > 🚀 **Note:** You're part of an exclusive group testing this API before its public release!
 
-## 🎬 Quick Introduction from Eyal @ Tavily
-
-[![Tavily Crawl Introduction]](https://your-intro-video-link-here)
-*to be added soon...*
-
 ## 📂 Repository Structure
 
-This repository contains everything you need to get started with Tavily Crawl. We have prepared some notebooks and use cases to inspire ideas:
+This repository contains everything you need to get started with Tavily Crawl. We have prepared some notebooks and use cases to inspire ideas. Note: the python SDK is still in the works, so we will make direct HTTP POST requests to Tavily's crawl endpoint.
 
 ### [Cookbooks](./cookbooks)
 A series of Jupyter notebooks to help you learn and implement Tavily Crawl:

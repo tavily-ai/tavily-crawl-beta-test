@@ -65,9 +65,9 @@ def run_job_search_agent(company_name: str) -> Dict[str, Any]:
     agent = create_job_search_agent()
 
     # Save the workflow as a Mermaid PNG
-    agent.get_graph(xray=True).draw_mermaid_png(
-        output_file_path="job_search/agentic_workflow_diagram.png"
-    )
+    # agent.get_graph(xray=True).draw_mermaid_png(
+    #     output_file_path="job_search/agentic_workflow_diagram.png"
+    # )
 
     # print("Workflow diagram saved as job_search_workflow.png")
 

@@ -7,7 +7,7 @@ This project uses a LangGraph agent with Tavily to search, crawl, and extract jo
 You can modify the application configuration in `src/utils/config.py`:
 
 - `DEFAULT_MODEL`: The OpenAI model to use
-- `DEFAULT_CRAWL_LIMIT`: The maximum number of pages to crawl -- set to 5 by default...feel free to play around.
+- `DEFAULT_CRAWL_LIMIT`: The maximum number of pages to crawl -- set to 30 by default...feel free to play around.
 - `DEFAULT_EXTRACT_DEPTH`: Set to `advanced` to retrieve more data, including tables and embedded content, with higher success.
 
 
@@ -19,7 +19,7 @@ You can modify the application configuration in `src/utils/config.py`:
 - **Advanced Entity Recognition**: Extracts structured data (job titles, locations, benefits) from web content using OpenAI's LLM capabilities
 - **LangGraph Orchestration**: Coordinates the entire workflow through a sophisticated agent-based architecture
 
-Note: control the number of pages to crawl in `src/utils/config.py` with the `DEFAULT_CRAWL_LIMIT` variable. Currently set to 5 to limit api consumption.
+Note: control the number of pages to crawl in `src/utils/config.py` with the `DEFAULT_CRAWL_LIMIT` variable. Currently set to 30 to limit api consumption.
 
 
 ## Agent Workflow
@@ -46,9 +46,10 @@ python3 -m pip install -r requirements.txt
 
 ## Usage
 
-Run the agent with a company name. For example:
+Run the agent with a company name from the root directory of this repo. For example:
 ```bash
-python3 src/main.py "HiBob"
+
+python3 job_search/src/main.py "HiBob"
 ```
 
 ## Example Output

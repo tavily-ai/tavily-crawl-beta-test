@@ -28,7 +28,7 @@ def get_llm(model_name=DEFAULT_MODEL, temperature=DEFAULT_TEMPERATURE):
 
 
 # Crawl configuration
-DEFAULT_CRAWL_LIMIT = 5
+DEFAULT_CRAWL_LIMIT = 30
 DEFAULT_CRAWL_FORMATS = ["links"]
 
 # Extract configuration

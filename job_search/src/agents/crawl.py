@@ -40,7 +40,7 @@ def crawl(state: AgentState) -> Dict[str, Any]:
 
         # Call Tavily API for crawling
         response = requests.post(
-            "https://dev-api.tavily.com/crawl",
+            "https://api.tavily.com/crawl",
             headers={"Authorization": f"Bearer {TAVILY_API_KEY}"},
             json={
                 "url": selected_domain,
@@ -68,21 +68,21 @@ def crawl(state: AgentState) -> Dict[str, Any]:
                     ".*workable.com.*",
                 ],
                 # Filter paths at API level
-                "select_paths": [
-                    ".*/jobs/.*",
-                    ".*/careers/.*",
-                    ".*/job/.*",
-                    ".*/position.*",
-                    ".*/opening.*",
-                    ".*/vacancy.*",
-                    ".*/apply.*",
-                    ".*/employment.*",
-                    ".*/join-us.*",
-                    ".*/career.*",
-                    # UUID or job ID patterns
-                    ".*/[a-f0-9-]{36}.*",
-                    ".*/\\d+(?:-[a-zA-Z0-9-]+)+.*",
-                ],
+                # "select_paths": [
+                #     ".*/jobs/.*",
+                #     ".*/careers/.*",
+                #     ".*/job/.*",
+                #     ".*/position.*",
+                #     ".*/opening.*",
+                #     ".*/vacancy.*",
+                #     ".*/apply.*",
+                #     ".*/employment.*",
+                #     ".*/join-us.*",
+                #     ".*/career.*",
+                #     # UUID or job ID patterns
+                #     ".*/[a-f0-9-]{36}.*",
+                #     ".*/\\d+(?:-[a-zA-Z0-9-]+)+.*",
+                # ],
             },
         )
 
