@@ -10,9 +10,23 @@ We're thrilled to have you join us as we roll out our newest endpoint: **Tavily 
 
 > 🚀 **Note:** You're part of an exclusive group testing this API before its public release!
 
+
+## 🕸️ What is Tavily-Crawl?
+
+The `/crawl` endpoint initiates a structured web crawl starting from a specified base URL. 
+
+Think of Tavily Crawl as a site explorer. You give it a starting point — like a homepage — and it builds a tree of URLs by following links. It mimics the way a human would naturally explore a site, but with powerful controls and built-in filtering.
+
+
+
 ## 📂 Repository Structure
 
 This repository contains everything you need to get started with Tavily Crawl. We have prepared some notebooks and use cases to inspire ideas. Note: the python SDK is still in the works, so we will make direct HTTP POST requests to Tavily's crawl endpoint.
+
+### [API Documentation](./docs)
+A md of Tavily Crawl API:
+
+1. [API Documentation](./docs/crawl_api.md) - Crawl API documentation
 
 ### [Cookbooks](./cookbooks)
 A series of Jupyter notebooks to help you learn and implement Tavily Crawl:
