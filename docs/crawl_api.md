@@ -8,14 +8,15 @@ The `/crawl` endpoint initiates a structured web crawl starting from a specified
 
 | Parameter         | Type     | Required | Description                                                                                             | Default  |
 |------------------|----------|----------|---------------------------------------------------------------------------------------------------------|----------|
-| `base_url`       | string   | ✅ Yes    | The root URL to begin the crawl.                                                                        | —        |
+| `url`       | string   | ✅ Yes    | The root URL to begin the crawl.                                                                        | —        |
 | `max_depth`      | integer  | No       | Max depth of the crawl tree. Defines how far from the base URL the crawler can explore.                 | `1`      |
 | `max_breadth`    | integer  | No       | Max number of links to follow **per level** of the tree (i.e., per page).                               | `20`     |
-| `max_links`      | integer  | No       | Total number of links the crawler will process before stopping.                                         | `50`     |
-| `select_paths`   | array    | No       | **Regex patterns** to select only URLs with specific path patterns (e.g., `/docs/.*`, `/api/v1.*`).     | `null`   |
-| `select_domains` | array    | No       | **Regex patterns** to select crawling to specific domains or subdomains (e.g., `^docs\.example\.com$`). | `null`   |
+| `limit`      | integer  | No       | Total number of links the crawler will process before stopping.                                         | `50`     |
+| `select_paths`   | array of strings    | No       | **Regex patterns** to select only URLs with specific path patterns (e.g., `/docs/.*`, `/api/v1.*`).     | `null`   |
+| `select_domains` | array of strings    | No       | **Regex patterns** to select crawling to specific domains or subdomains (e.g., `^docs\.example\.com$`). | `null`   |
 | `allow_external` | boolean  | No       | Whether to allow following links that go to external domains.                                           | `false`  |
-| `categories`     | array    | No       | Filter URLs using predefined categories like `documentation`, `blog`, `api`, etc.                       | `null`   |
+| `categories`     | array of strings    | No       | Filter URLs using predefined categories like `documentation`, `blog`, `api`, etc.                       | `null`   |
+| `extract_depth`  | string   | No       | Advanced extraction retrieves more data, including tables and embedded content, with higher success but may increase latency. Options: `"basic"` or `"advanced"`.                                 | `"basic"`|
 
 
 ---
@@ -25,7 +26,7 @@ All parameters are passed in the JSON body of a `POST` request to `/crawl`.
 
 ---
 
-#### `base_url` (string, required)
+#### `url` (string, required)
 
 The root URL where the crawl starts.
 
@@ -56,7 +57,7 @@ The maximum number of links to follow **per page** (per level in the crawl tree)
 
 ---
 
-#### `max_links` (integer, optional)
+#### `limit` (integer, optional)
 
 The maximum **total number of links** to crawl in the entire session.
 
@@ -112,6 +113,14 @@ Semantic filtering based on smart URL classification. Only include pages that ma
   - `"Developers"`
   - `"Contact"`
 
+#### `extract_depth` (string, optional)
+
+Controls how thoroughly the crawler extracts content from each page.
+
+- **Default**: `"basic"`
+- **Options**: `"basic"` or `"advanced"`
+- **Example**: `"advanced"`
+- `"advanced"` extraction retrieves more data, including tables and embedded content, with higher success but may increase latency.
 ---
 
 > ✅ **You can combine multiple filters together** to guide the crawler very precisely — for example, only crawling blog posts under a specific subdomain with a certain path prefix.
