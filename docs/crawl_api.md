@@ -104,13 +104,12 @@ Semantic filtering based on smart URL classification. Only include pages that ma
 - **Example**: `["Documentation", "About"]`
 - Supported values:
   - `"Careers"`
-  - `"Enterprise"`
-  - `"About"`
+  - `"Blog"`
   - `"Documentation"`
-  - `"Support"`
-  - `"Community"`
-  - `"Pricing"`
   - `"About"`
+  - `"Pricing"`
+  - `"Community"`
+  - `"Developers"`
   - `"Contact"`
 
 ---
