@@ -32,7 +32,6 @@ def crawl(state: AgentState) -> Dict[str, Any]:
         parsed_url = urlparse(selected_domain)
         base_domain_parts = parsed_url.netloc.split(".")
 
-        # Get the main domain (e.g., hibob.com from careers.hibob.com)
         if len(base_domain_parts) >= 2:
             main_domain = ".".join(base_domain_parts[-2:])
         else:
