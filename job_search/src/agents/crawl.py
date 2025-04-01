@@ -45,44 +45,11 @@ def crawl(state: AgentState) -> Dict[str, Any]:
             json={
                 "url": selected_domain,
                 "limit": DEFAULT_CRAWL_LIMIT,
-                "max_depth": 1,
+                "max_depth": 3,
                 "max_breadth": 100,
                 "extract_depth": DEFAULT_EXTRACT_DEPTH,
-                # Filter domains at API level
-                "select_domains": [
-                    f".*{main_domain}.*",  # Include all subdomains of the main domain
-                    ".*careers.*",
-                    ".*jobs.*",
-                    ".*work.*",
-                    ".*join.*",
-                    ".*talent.*",
-                    ".*hire.*",
-                    ".*recruiting.*",
-                    ".*greenhouse.io.*",
-                    ".*lever.co.*",
-                    ".*workday.com.*",
-                    ".*breezy.hr.*",
-                    ".*jobvite.com.*",
-                    ".*smartrecruiters.com.*",
-                    ".*bamboohr.com.*",
-                    ".*workable.com.*",
-                ],
-                # Filter paths at API level
-                # "select_paths": [
-                #     ".*/jobs/.*",
-                #     ".*/careers/.*",
-                #     ".*/job/.*",
-                #     ".*/position.*",
-                #     ".*/opening.*",
-                #     ".*/vacancy.*",
-                #     ".*/apply.*",
-                #     ".*/employment.*",
-                #     ".*/join-us.*",
-                #     ".*/career.*",
-                #     # UUID or job ID patterns
-                #     ".*/[a-f0-9-]{36}.*",
-                #     ".*/\\d+(?:-[a-zA-Z0-9-]+)+.*",
-                # ],
+                "allow_external": True,
+                "categories": ["Careers"],
             },
         )
 

@@ -7,7 +7,7 @@ This project uses a LangGraph agent with Tavily to search, crawl, and extract jo
 You can modify the application configuration in `src/utils/config.py`:
 
 - `DEFAULT_MODEL`: The OpenAI model to use
-- `DEFAULT_CRAWL_LIMIT`: The maximum number of pages to crawl -- set to 30 by default...feel free to play around.
+- `DEFAULT_CRAWL_LIMIT`: The maximum number of pages to crawl -- set to 100 by default...feel free to play around.
 - `DEFAULT_EXTRACT_DEPTH`: Set to `advanced` to retrieve more data, including tables and embedded content, with higher success.
 
 
@@ -15,11 +15,11 @@ You can modify the application configuration in `src/utils/config.py`:
 
 - **Tavily `/Search`**: Identifies the optimal job posting domain for any specified company
 - **Tavily `/Crawl`**: Intelligently navigates the career domain to discover all job posting links and extract relevant content
-  - Utilizes `select_paths` and `select_domains` filtering parameters to precisely target job postings
-- **Advanced Entity Recognition**: Extracts structured data (job titles, locations, benefits) from web content using OpenAI's LLM capabilities
+  - Utilizes `categories` semantic filtering parameter to precisely target job postings
+- **Entity Recognition**: Extracts structured data (job titles, locations, benefits) from web content using OpenAI's LLM capabilities
 - **LangGraph Orchestration**: Coordinates the entire workflow through a sophisticated agent-based architecture
 
-Note: control the number of pages to crawl in `src/utils/config.py` with the `DEFAULT_CRAWL_LIMIT` variable. Currently set to 30 to limit api consumption.
+Note: control the number of pages to crawl in `src/utils/config.py` with the `DEFAULT_CRAWL_LIMIT` variable. Currently set to 100 to limit api consumption.
 
 
 ## Agent Workflow
@@ -49,7 +49,7 @@ python3 -m pip install -r requirements.txt
 Run the agent with a company name from the root directory of this repo. For example:
 ```bash
 
-python3 job_search/src/main.py "HiBob"
+python3 job_search/src/main.py "Wiz"
 ```
 
 ## Example Output
@@ -60,35 +60,50 @@ The agent produces a structured JSON output containing the Tavily Search result 
 
 ```json
 {
-  "company_name": "HiBob",
+  "company_name": "Wiz",
   "domain_search_result": {
-    "query": "HiBob careers",
+    "query": "Wiz careers",
     "top_urls": [
-      "https://www.hibob.com/careers/",
-      "https://uk.linkedin.com/company/hibob/jobs",
-      "https://www.indeed.com/cmp/Hibob"
+      "https://www.wiz.io/careers",
+      "https://jobs.a16z.com/jobs/wiz",
+      "https://www.linkedin.com/company/wizsecurity/jobs"
     ],
-    "selected_domain": "https://www.hibob.com/careers/"
+    "selected_domain": "https://www.wiz.io/careers"
   },
   "crawl_result": {
-    "domain": "https://www.hibob.com/careers/",
+    "domain": "https://www.wiz.io/careers",
     "links": [
-      "https://hibob-e013d08dd01044.careers.hibob.com/jobs/98c12943-f07c-4b0b-9bc6-3f1de303c019",
-      "https://hibob-e013d08dd01044.careers.hibob.com/jobs/3a5b4e08-40b0-425d-b41f-f18e5d85ea0e",
+      "https://wiz.io/careers/job/4449112006/hris-analystgh_jid=4449112006",
+      "https://wiz.io/careers/job/4005273006/dev-ops-engineergh_jid=4005273006",
+      "https://wiz.io/careers/job/4004237006/product-managergh_jid=4004237006",
+      "https://wiz.io/careers/job/4408878006/data-engineergh_jid=4408878006",
       // ... more links ...
     ]
   },
   "extract_result": {
     "extracted_jobs": [
       {
-        "title": "Procurement Buyer –SaaS & IT Hardware",
-        "location": "IL, Israel",
-        "url": "https://hibob-e013d08dd01044.careers.hibob.com/jobs/98c12943-f07c-4b0b-9bc6-3f1de303c019"
+        "title": "HRIS Analyst",
+        "location": "Tel Aviv, IL",
+        "url": "https://wiz.io/careers/job/4449112006/hris-analystgh_jid=4449112006",
+        "benefits": [
+          "Equal opportunity employer",
+          "Diverse and inclusive workplace",
+          "Opportunity to work with a global team",
+          "Freedom to think creatively and dream big"
+        ]
       },
       {
-        "title": "Senior Data Engineer",
-        "location": "IL, Israel",
-        "url": "https://hibob-e013d08dd01044.careers.hibob.com/jobs/3a5b4e08-40b0-425d-b41f-f18e5d85ea0e"
+        "title": "DevOps Engineer",
+        "location": "Tel Aviv",
+        "url": "https://wiz.io/careers/job/4005273006/dev-ops-engineergh_jid=4005273006",
+        "benefits": [
+          "Equal opportunity employer",
+          "Innovative, high-performance team",
+          "Work with cutting-edge technologies",
+          "Dynamic and agile environment",
+          "Freedom to think creatively and dream big"
+        ]
       },
       // ... more jobs ...
     ]
