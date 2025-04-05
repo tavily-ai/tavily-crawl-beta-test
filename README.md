@@ -48,7 +48,7 @@ Check out the [Job Search README](./job_search/README.md) for a detailed descrip
 
 ```bash
 # Clone this repository
-git clone https://github.com/<your-username>/tavily-crawl-beta-test.git
+git clone https://github.com/tavily-ai/tavily-crawl-beta-test.git
 
 # Navigate to the repository directory
 cd tavily-crawl-beta-test
