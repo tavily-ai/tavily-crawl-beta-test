@@ -112,6 +112,7 @@ Semantic filtering based on smart URL classification. Only include pages that ma
   - `"Community"`
   - `"Developers"`
   - `"Contact"`
+  - `"Media"`
 
 #### `extract_depth` (string, optional)
 
