@@ -64,8 +64,8 @@ def crawl(state: AgentState) -> Dict[str, Any]:
         # Extract links and raw content from the crawl result
         links = []
         raw_content_by_url = {}
-        if "data" in crawl_result_data:
-            pages = crawl_result_data["data"]
+        if "results" in crawl_result_data:
+            pages = crawl_result_data["results"]
             for page in pages:
                 if "url" in page:
                     links.append(page["url"])
