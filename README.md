@@ -13,11 +13,55 @@ We're thrilled to have you join us as we roll out our newest endpoint: **Tavily 
 
 ## 🕸️ What is Tavily-Crawl?
 
-The `/crawl` endpoint initiates a structured web crawl starting from a specified base URL. 
+Tavily Crawl is a site explorer that traverses a website from a given starting point. Traditionally, site crawlers are used to solve the following problems:
 
-Think of Tavily Crawl as a site explorer. You give it a starting point — like a homepage — and it builds a tree of URLs by following links. It mimics the way a human would naturally explore a site, but with powerful controls and built-in filtering.
+**The Needle-in-Haystack:** When a piece of information is deeply embedded within a website, and is unlikely to be discovered via a regular search. e.g. a niche piece of developer documentation or the price of a specific hardware component.
 
+**High-Volume Retrieval of Data:** When a user wants to rapidly identify *all* pages on a site that fit a set of requirements. e.g. a user wants to find *all* the pages on a property listing site that concern properties in a specific area. 
 
+So in order to create a powerful tool that can find you *all* of a certain thing (or a handful of hard-to-find things) within a particular website, we built `/crawl` to have the following characteristics:
+
+**1. High-Quality, Low-Latency Information Retrieval**: Tavily Crawl uses the same powerful technology behind [Tavily Extract](https://docs.tavily.com/documentation/api-reference/endpoint/extract) to fetch links from dynamically rendered pages, single-page applications, and other hard-to-access websites.
+
+**2. Agent-First Intelligent Navigation**: We built a crawler that could be given a goal and would intelligently navigate a website to achieve it. More importantly, we built a crawler that could solve needle-in-haystack problems AND high-volume data retrieval tasks using natural language input. We had agents in mind as we designed Crawl. The `crawl` endpoint can easily be controlled by an agent or be part of a greater agentic workflow. 
+
+**3. Breadth-First, Graph-Faithful**: Tavily Crawl uses the same graph theory frameworks on which the web is built to deliver a *breadth-first* crawler (more on this later). Being able to faithfully reconstruct a complex site graph is how Tavily Crawl consistently returns high-quality results at low-latency.
+
+With these characteristics in mind, we remind you that `crawl` is an unopiniated tool that can mine deep value from websites. In this repository, we'll show you how to use crawl in agentic applications. 
+
+## 👾 Your First Crawl
+
+You can call crawl via API as simple as:
+
+```
+curl -X POST https://api.tavily.com/crawl \
+  -H "Authorization: Bearer <API_KEY>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "tavily.com",
+    "depth": 2,
+    "query": "documentation"
+  }'
+```
+Output:
+
+```
+"urls":
+      "https://docs.tavily.com/",
+      "https://docs.tavily.com/api-reference",
+      "https://docs.tavily.com/sdk",
+      "https://docs.tavily.com/welcome",
+      "https://docs.tavily.com/documentation/quickstart",
+      ...
+```
+
+The `url` parameter is your starting URL. 
+
+The `depth` parameter specifies how many "hops" from the starting URL you want to permit the crawler to go. If it's set at 2, it means the crawler will go from the starting URL to it's linked pages, and then will traverse the pages linked to those pages before returning results.
+
+The `query` parameter allows you to specify your goal in natural language so you can sit back and let the crawler navigate the sitemap. 
+
+Read the [API Documentation](./docs/crawl_api.md) for more details on parameters. Crawl is highly conifgurable, and yet highly effective with only the above three parameters. 
 
 ## 📂 Repository Structure
 
