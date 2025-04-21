@@ -12,6 +12,7 @@ The `/crawl` endpoint initiates a structured web crawl starting from a specified
 | `max_depth`      | integer  | No       | Max depth of the crawl tree. Defines how far from the base URL the crawler can explore.                 | `1`      |
 | `max_breadth`    | integer  | No       | Max number of links to follow **per level** of the tree (i.e., per page).                               | `20`     |
 | `limit`      | integer  | No       | Total number of links the crawler will process before stopping.                                         | `50`     |
+| `query`      | string   | No       | Natural language instructions for the crawler                                                           |     —    |
 | `select_paths`   | array of strings    | No       | **Regex patterns** to select only URLs with specific path patterns (e.g., `/docs/.*`, `/api/v1.*`).     | `null`   |
 | `select_domains` | array of strings    | No       | **Regex patterns** to select crawling to specific domains or subdomains (e.g., `^docs\.example\.com$`). | `null`   |
 | `allow_external` | boolean  | No       | Whether to allow following links that go to external domains.                                           | `false`  |
@@ -38,11 +39,16 @@ The root URL where the crawl starts.
 
 #### `max_depth` (integer, optional)
 
-The maximum **depth** to crawl from the base URL (like the levels of a tree).
+The maximum number of hops from the starting URL the crawler should go. 
 
 - **Default**: `1`
-- **Example**: `2`
-- A value of `1` means the crawler will follow links on the `base_url`, but not go deeper.
+- **Example**:
+- tavily.com (depth 0) -> docs.tavily.com (depth 1) -> docs.tavily.com/welcome (depth 2)
+
+Note: Depth is relative and does not necessarily pertain to the file hierarchy of a website. 
+- docs.tavily.com (depth 0) -> [tavily.com, docs.tavily.com/welcome] (depth 1) -> status.tavily.com (depth 2) is possible
+
+Warning: Increasing the depth results in an exponential increase in work. Mainting depth <= 3 is recommended.
 
 ---
 
@@ -64,6 +70,15 @@ The maximum **total number of links** to crawl in the entire session.
 - **Default**: `500`
 - **Example**: `1000`
 - This is a hard stop for the crawler regardless of depth or breadth.
+
+---
+
+#### `query` (string, optional)
+
+Natural language instructions for the crawler
+
+- **Examples**: `"find documentation for the JavaScript SDK", "all running shoes", "all properties in Lisbon, Portugal"`
+- The crawler will intelligently choose links to navigate based on the provided user instructions. 
 
 ---
 
@@ -134,18 +149,13 @@ On success, the API returns:
 
 ```json
 {
-  "success": true,
-  "metadata": {
-    "pages_crawled": 120,
-    "max_depth_reached": 3,
-    "successful_urls": 115,
-    "response_time": 2.15
-  },
-  "config": { /* original request config */ },
-  "data": [
-    {
-      "url": "https://example.com/docs/start",
-      "raw_content": "...",
-    }
-  ]
+    "base_url": "wikipedia.org/wiki/computer",
+    "results": [
+        {
+            "url": "https://en.wikipedia.org/wiki/Computer",
+            "raw_content": ...,
+            "images": []
+        }, ...
+    ],
+    "response_time" : 1.23,
 }
