@@ -1,6 +1,6 @@
 ## 📡 `/crawl` Endpoint – Start a Crawl Job
 
-The `/crawl` endpoint initiates a structured web crawl starting from a specified base URL. The crawler expands from that point like a tree, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.
+The `/crawl` endpoint initiates a structured web crawl starting from a specified base URL. The crawler traverses a site like a graph, following internal links across pages. You can control how deep and wide it goes, and guide it to focus on specific sections of the site.
 
 ---
 
@@ -113,6 +113,8 @@ Semantic filtering based on smart URL classification. Only include pages that ma
   - `"Developers"`
   - `"Contact"`
   - `"Media"`
+ 
+Note: Categories does not support natural language querying.
 
 #### `extract_depth` (string, optional)
 
