@@ -44,7 +44,7 @@ def crawl(state: AgentState) -> Dict[str, Any]:
             json={
                 "url": selected_domain,
                 "limit": DEFAULT_CRAWL_LIMIT,
-                "max_depth": 3,
+                "max_depth": 2,
                 "max_breadth": 100,
                 "extract_depth": DEFAULT_EXTRACT_DEPTH,
                 "allow_external": True,

@@ -9,7 +9,7 @@ The `/crawl` endpoint initiates a structured web crawl starting from a specified
 | Parameter         | Type     | Required | Description                                                                                             | Default  |
 |------------------|----------|----------|---------------------------------------------------------------------------------------------------------|----------|
 | `url`       | string   | ✅ Yes    | The root URL to begin the crawl.                                                                        | —        |
-| `max_depth`      | integer  | No       | Max depth of the crawl tree. Defines how far from the base URL the crawler can explore.                 | `1`      |
+| `max_depth`      | integer  | No       | Max depth of the crawl. Defines how far from the base URL the crawler can explore.                 | `1`      |
 | `max_breadth`    | integer  | No       | Max number of links to follow **per level** of the tree (i.e., per page).                               | `20`     |
 | `limit`      | integer  | No       | Total number of links the crawler will process before stopping.                                         | `50`     |
 | `query`      | string   | No       | Natural language instructions for the crawler                                                           |     —    |
