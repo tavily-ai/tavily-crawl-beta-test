@@ -6,7 +6,9 @@ from tavily import TavilyClient
 
 from src.models.schema import AgentState, DomainSearchResult
 from src.utils.config import TAVILY_API_KEY, get_llm
+from src.utils.setup_logger import setup_logger
 
+logger = setup_logger("Domain Search")
 # Initialize Tavily client
 tavily_client = TavilyClient(TAVILY_API_KEY)
 
@@ -49,6 +51,7 @@ def get_top_urls(query: str, num_results: int = 3) -> list:
 
         # Extract URLs from results
         top_urls = [result["url"] for result in search_results["results"][:num_results]]
+        logger.info(f"Top URLs: {top_urls}")
 
         return top_urls
     except Exception as e:

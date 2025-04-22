@@ -1,6 +1,10 @@
 from typing import Any, Dict
 from urllib.parse import urlparse
 
+from src.utils.setup_logger import setup_logger
+
+logger = setup_logger("Crawl")
+
 import requests
 
 from src.models.schema import AgentState, CrawlResult
@@ -38,6 +42,8 @@ def crawl(state: AgentState) -> Dict[str, Any]:
             main_domain = parsed_url.netloc
 
         # Call Tavily API for crawling
+        logger.info(f"Crawling {selected_domain}")
+        
         response = requests.post(
             "https://api.tavily.com/crawl",
             headers={"Authorization": f"Bearer {TAVILY_API_KEY}"},
@@ -73,7 +79,7 @@ def crawl(state: AgentState) -> Dict[str, Any]:
                     if "raw_content" in page:
                         raw_content_by_url[page["url"]] = page["raw_content"]
 
-        print(f"Crawled {len(links)} pages")
+        logger.info(f"Crawled {len(links)} pages")
         # print(links)
 
         # Create CrawlResult
