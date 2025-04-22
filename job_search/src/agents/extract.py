@@ -4,6 +4,9 @@ from typing import Any, Dict
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from tavily import TavilyClient
+from src.utils.setup_logger import setup_logger
+
+logger = setup_logger("Extract")
 
 from src.models.schema import AgentState, ExtractResult, JobPosting
 from src.utils.config import TAVILY_API_KEY, get_llm
@@ -129,13 +132,14 @@ async def extract_async(state: AgentState) -> Dict[str, Any]:
         # Create ExtractResult
         extract_result = ExtractResult(extracted_jobs=job_postings)
 
+        logger.info(f"Extracted {len(job_postings)} job postings")
         return {"extract_result": extract_result}
 
     except Exception as e:
         import traceback
 
-        print(f"Error in extraction: {str(e)}")
-        print(traceback.format_exc())
+        logger.error(f"Error in extraction: {str(e)}")
+        logger.error(traceback.format_exc())
         return {"error": f"Error in extraction: {str(e)}"}
 
 
